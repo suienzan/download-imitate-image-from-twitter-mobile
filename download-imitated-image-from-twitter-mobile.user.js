@@ -2,28 +2,55 @@
 // @name        Download imitated image from twitter mobile
 // @namespace   suienzan
 // @match       https://mobile.twitter.com/*
-// @version     0.0.0
+// @version     0.0.1
 // @author      suienzan
+// @grant       GM.xmlHttpRequest
 // @description DO NOT USE THIS SCRIPT IF YOU DON'T EXACTLY KNOW WHAT YOU ARE DOING!
 // ==/UserScript==
 
+// options
+const removeButtonAfterDownload = true;
+
+// scripts
 const imageSelector = 'img[draggable="true"]:not([alt=""]';
 
 const getFilename = (url) => (url ? url.split('/').pop().split('#').shift()
   .split('?')
   .shift() : null);
 
+const removeButton = () => {
+  const button = document.querySelector('[data-testid="download"]');
+  if (button) button.remove();
+};
+
 const download = (filename, href) => {
   const link = document.createElement('a');
   link.download = filename;
   link.href = href;
   link.click();
+
+  if (removeButtonAfterDownload) removeButton();
 };
+
+const fetch = (url) => new Promise((resolve, reject) => {
+  GM.xmlHttpRequest({
+    method: 'GET',
+    url,
+    responseType: 'blob',
+    onload(response) {
+      resolve(response.response);
+    },
+    onerror(err) {
+      reject(err);
+    },
+  });
+});
 
 // imitate image and download
 const imitateImage = async (url) => {
   const filename = getFilename(url);
-  const blob = await fetch(url).then((response) => response.blob());
+
+  const blob = await fetch(url);
   const blobURL = window.URL.createObjectURL(blob);
 
   const image = new Image();

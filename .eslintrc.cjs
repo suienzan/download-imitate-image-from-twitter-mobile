@@ -4,4 +4,7 @@ module.exports = {
     es2021: true,
   },
   extends: ['airbnb-base'],
+  globals: {
+    GM: 'readonly',
+  },
 };
