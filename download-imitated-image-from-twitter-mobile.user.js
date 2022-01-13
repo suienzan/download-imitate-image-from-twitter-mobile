@@ -2,7 +2,7 @@
 // @name        Download imitated image from twitter mobile
 // @namespace   suienzan
 // @match       https://mobile.twitter.com/*
-// @version     0.0.1
+// @version     0.0.2
 // @author      suienzan
 // @grant       GM.xmlHttpRequest
 // @description DO NOT USE THIS SCRIPT IF YOU DON'T EXACTLY KNOW WHAT YOU ARE DOING!
@@ -20,7 +20,7 @@ const getFilename = (url) => (url ? url.split('/').pop().split('#').shift()
 
 const removeButton = () => {
   const button = document.querySelector('[data-testid="download"]');
-  if (button) button.remove();
+  if (button) button.parentNode.remove();
 };
 
 const download = (filename, href) => {
@@ -109,7 +109,6 @@ const addDownload = (index) => {
   const button = next.querySelector('[role="button"]');
 
   const indexNotMatch = Number(button.dataset.index) !== index;
-
   const noDownload = button.dataset.testid !== 'download';
 
   if (noDownload || indexNotMatch) {
@@ -134,6 +133,8 @@ const observer = new MutationObserver(() => {
   if (href !== oldHref) {
     oldHref = href;
     if (reg.test(href)) {
+      removeButton();
+
       const index = getFilename(href) - 1;
 
       interval = setInterval(() => {
