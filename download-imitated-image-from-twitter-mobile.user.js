@@ -2,7 +2,7 @@
 // @name        Download imitated image from twitter mobile
 // @namespace   suienzan
 // @match       https://mobile.twitter.com/*
-// @version     0.0.3
+// @version     0.0.4
 // @author      suienzan
 // @description DO NOT USE THIS SCRIPT IF YOU DON'T EXACTLY KNOW WHAT YOU ARE DOING!
 // ==/UserScript==
@@ -88,6 +88,7 @@ const addDownload = (index) => {
 
   if (noDownload || indexNotMatch) {
     const downloadNode = patchNode(next, index);
+    image.crossOrigin = 'Anonymous';
     downloadNode.addEventListener('click', () => imitateImage(image));
 
     if (noDownload) {
