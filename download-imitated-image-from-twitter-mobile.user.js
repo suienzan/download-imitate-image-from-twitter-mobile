@@ -2,9 +2,8 @@
 // @name        Download imitated image from twitter mobile
 // @namespace   suienzan
 // @match       https://mobile.twitter.com/*
-// @version     0.0.2
+// @version     0.0.3
 // @author      suienzan
-// @grant       GM.xmlHttpRequest
 // @description DO NOT USE THIS SCRIPT IF YOU DON'T EXACTLY KNOW WHAT YOU ARE DOING!
 // ==/UserScript==
 
@@ -32,33 +31,10 @@ const download = (filename, href) => {
   if (removeButtonAfterDownload) removeButton();
 };
 
-const fetch = (url) => new Promise((resolve, reject) => {
-  GM.xmlHttpRequest({
-    method: 'GET',
-    url,
-    responseType: 'blob',
-    onload(response) {
-      resolve(response.response);
-    },
-    onerror(err) {
-      reject(err);
-    },
-  });
-});
-
 // imitate image and download
-const imitateImage = async (url) => {
-  const filename = getFilename(url);
-
-  const blob = await fetch(url);
-  const blobURL = window.URL.createObjectURL(blob);
-
-  const image = new Image();
-  await new Promise((resolve, reject) => {
-    image.addEventListener('load', () => resolve(image));
-    image.addEventListener('error', (err) => reject(err));
-    image.src = blobURL;
-  });
+const imitateImage = async (image) => {
+  const { src } = image;
+  const filename = getFilename(src);
 
   const canvas = document.createElement('canvas');
   const { width, height } = image;
@@ -103,7 +79,6 @@ const addDownload = (index) => {
   if (!image) return;
 
   clearInterval(interval);
-  const { src } = image;
   const like = document.querySelector('[data-testid="like"]').parentNode;
   const next = like.nextSibling;
   const button = next.querySelector('[role="button"]');
@@ -113,7 +88,7 @@ const addDownload = (index) => {
 
   if (noDownload || indexNotMatch) {
     const downloadNode = patchNode(next, index);
-    downloadNode.addEventListener('click', () => imitateImage(src));
+    downloadNode.addEventListener('click', () => imitateImage(image));
 
     if (noDownload) {
       like.after(downloadNode);
