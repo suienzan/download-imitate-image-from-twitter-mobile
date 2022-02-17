@@ -16,7 +16,7 @@ As the limit of the browser, you may need to create a new script and then copy t
 
 It adds a download button to the image view page of twitter. Click to download.
 
-**You need to allow auto download for `https://mobile.twitter.com` from options ( ⋮ ) -> Settings -> Site Settings.**
+**You need to allow auto download for `mobile.twitter.com` from options ( ⋮ ) -> Settings -> Site Settings.**
 
 ## License
 
