@@ -2,7 +2,7 @@
 // @name        Download imitated image from twitter mobile
 // @namespace   suienzan
 // @match       https://mobile.twitter.com/*
-// @version     0.0.4
+// @version     0.0.5
 // @author      suienzan
 // @description DO NOT USE THIS SCRIPT IF YOU DON'T EXACTLY KNOW WHAT YOU ARE DOING!
 // ==/UserScript==
@@ -37,7 +37,7 @@ const imitateImage = async (image) => {
   const filename = getFilename(src);
 
   const canvas = document.createElement('canvas');
-  const { width, height } = image;
+  const { naturalWidth: width, naturalHeight: height } = image;
   canvas.width = width;
   canvas.height = height;
 
