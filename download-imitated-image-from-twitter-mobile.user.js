@@ -2,7 +2,7 @@
 // @name        Download imitated image from twitter mobile
 // @namespace   suienzan
 // @match       https://mobile.twitter.com/*
-// @version     0.0.5
+// @version     0.1.0
 // @author      suienzan
 // @description DO NOT USE THIS SCRIPT IF YOU DON'T EXACTLY KNOW WHAT YOU ARE DOING!
 // ==/UserScript==
@@ -31,6 +31,20 @@ const download = (filename, href) => {
   if (removeButtonAfterDownload) removeButton();
 };
 
+const dither = (x) => Math.floor(x + Math.random() * 16 - 16 / 2 + 256) % 256;
+
+const ditherFisrtPixel = (ctx) => {
+  const pixel = ctx.getImageData(0, 0, 1, 1);
+  const {
+    data: [r, g, b],
+  } = pixel;
+
+  const rgba = `rgba(${dither(r)}, ${dither(g)}, ${dither(b)}, 1)`;
+
+  ctx.fillStyle = rgba;
+  ctx.fillRect(0, 0, 1, 1);
+};
+
 // imitate image and download
 const imitateImage = async (image) => {
   const { src } = image;
@@ -43,7 +57,10 @@ const imitateImage = async (image) => {
 
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
+
   ctx.drawImage(image, 0, 0, width, height);
+  ditherFisrtPixel(ctx);
+
   download(filename, canvas.toDataURL());
 };
 
