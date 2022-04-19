@@ -2,7 +2,7 @@
 // @name        Download imitated image from twitter mobile
 // @namespace   suienzan
 // @match       https://mobile.twitter.com/*
-// @version     0.1.0
+// @version     0.1.1
 // @author      suienzan
 // @description DO NOT USE THIS SCRIPT IF YOU DON'T EXACTLY KNOW WHAT YOU ARE DOING!
 // ==/UserScript==
@@ -31,7 +31,10 @@ const download = (filename, href) => {
   if (removeButtonAfterDownload) removeButton();
 };
 
-const dither = (x) => Math.floor(x + Math.random() * 16 - 16 / 2 + 256) % 256;
+// eslint-disable-next-line no-nested-ternary
+const ditherRangeStart = (x) => (x < 8 ? 0 : x > 255 - 7 ? 255 - 15 : x - 7);
+
+const dither = (x) => ditherRangeStart(x) + Math.floor(Math.random() * 16);
 
 const ditherFisrtPixel = (ctx) => {
   const pixel = ctx.getImageData(0, 0, 1, 1);
