@@ -2,7 +2,7 @@
 // @name        Download imitated image from twitter mobile
 // @namespace   suienzan
 // @match       https://mobile.twitter.com/*
-// @version     0.1.1
+// @version     0.1.2
 // @author      suienzan
 // @description DO NOT USE THIS SCRIPT IF YOU DON'T EXACTLY KNOW WHAT YOU ARE DOING!
 // ==/UserScript==
@@ -91,15 +91,14 @@ const patchNode = (node, index) => {
   return newNode;
 };
 
-let interval = null;
+const likeSelector = '[data-testid="like"]';
 
 // Add a download button in the tweet
 const addDownload = (index) => {
   const image = document.querySelectorAll(imageSelector)[index];
   if (!image) return;
 
-  clearInterval(interval);
-  const like = document.querySelector('[data-testid="like"]').parentNode;
+  const like = document.querySelector(likeSelector).parentNode;
   const next = like.nextSibling;
   const button = next.querySelector('[role="button"]');
 
@@ -121,24 +120,32 @@ const addDownload = (index) => {
 
 const reg = /^https:\/\/(.*\.)?twitter.com\/.*\/status\/[0-9]+\/photo\/\d/;
 
-let oldHref = '';
+// wait image & like button loaded
+const newLikeObserver = (index) => {
+  const likeObserver = new MutationObserver(() => {
+    if (document.querySelector(likeSelector) && document.querySelectorAll(imageSelector)[index]) {
+      likeObserver.disconnect();
+      addDownload(index);
+    }
+  });
+
+  return likeObserver;
+};
+
+const config = { subtree: true, childList: true };
 
 // Watch twitter location change
+let oldHref = '';
 const observer = new MutationObserver(() => {
   const { href } = window.location;
   if (href !== oldHref) {
     oldHref = href;
+    const index = getFilename(href) - 1;
     if (reg.test(href)) {
+      newLikeObserver(index).observe(document.body, config);
       removeButton();
-
-      const index = getFilename(href) - 1;
-
-      interval = setInterval(() => {
-        addDownload(index);
-      }, 1000);
     }
   }
 });
 
-const config = { subtree: true, childList: true };
 observer.observe(document, config);
