@@ -2,7 +2,7 @@
 // @name        Download imitated image from twitter mobile
 // @namespace   suienzan
 // @match       https://mobile.twitter.com/*
-// @version     0.1.2
+// @version     0.1.3
 // @author      suienzan
 // @description DO NOT USE THIS SCRIPT IF YOU DON'T EXACTLY KNOW WHAT YOU ARE DOING!
 // ==/UserScript==
@@ -123,7 +123,8 @@ const reg = /^https:\/\/(.*\.)?twitter.com\/.*\/status\/[0-9]+\/photo\/\d/;
 // wait image & like button loaded
 const newLikeObserver = (index) => {
   const likeObserver = new MutationObserver(() => {
-    if (document.querySelector(likeSelector) && document.querySelectorAll(imageSelector)[index]) {
+    const image = document.querySelectorAll(imageSelector)[index];
+    if (document.querySelector(likeSelector) && image && image.complete) {
       likeObserver.disconnect();
       addDownload(index);
     }
