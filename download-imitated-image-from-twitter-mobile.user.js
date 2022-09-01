@@ -2,7 +2,7 @@
 // @name        Download imitated image from twitter mobile
 // @namespace   suienzan
 // @match       https://mobile.twitter.com/*
-// @version     0.1.3
+// @version     1.0.0
 // @author      suienzan
 // @description DO NOT USE THIS SCRIPT IF YOU DON'T EXACTLY KNOW WHAT YOU ARE DOING!
 // ==/UserScript==
@@ -19,7 +19,7 @@ const getFilename = (url) => (url ? url.split('/').pop().split('#').shift()
 
 const removeButton = () => {
   const button = document.querySelector('[data-testid="download"]');
-  if (button) button.parentNode.remove();
+  if (button) button.closest('div + div').remove();
 };
 
 const download = (filename, href) => {
@@ -143,8 +143,8 @@ const observer = new MutationObserver(() => {
     oldHref = href;
     const index = getFilename(href) - 1;
     if (reg.test(href)) {
-      newLikeObserver(index).observe(document.body, config);
       removeButton();
+      newLikeObserver(index).observe(document.body, config);
     }
   }
 });
