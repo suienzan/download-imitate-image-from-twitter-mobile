@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name        Download imitated image from twitter mobile
+// @name        Download imitated image from twitter
 // @namespace   suienzan
-// @match       https://mobile.twitter.com/*
+// @include     /^https:\/\/(mobile\.)?twitter\.com\//
 // @version     1.0.0
 // @author      suienzan
 // @description DO NOT USE THIS SCRIPT IF YOU DON'T EXACTLY KNOW WHAT YOU ARE DOING!
