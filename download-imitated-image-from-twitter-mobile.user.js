@@ -48,6 +48,15 @@ const ditherFisrtPixel = (ctx) => {
   ctx.fillRect(0, 0, 1, 1);
 };
 
+// fetch image
+const loadImage = (url) => new Promise((resolve, reject) => {
+  const image = new Image();
+  image.crossOrigin = 'Anonymous';
+  image.addEventListener('load', () => resolve(image));
+  image.addEventListener('error', (err) => reject(err));
+  image.src = url;
+});
+
 // imitate image and download
 const imitateImage = async (image) => {
   const { src } = image;
@@ -61,10 +70,27 @@ const imitateImage = async (image) => {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
+  // try draw image from element
   ctx.drawImage(image, 0, 0, width, height);
+
+  const pixelBuffer = new Uint32Array(
+    ctx.getImageData(0, 0, canvas.width, canvas.height).data.buffer,
+  );
+
+  const isCanvasBlank = !pixelBuffer.some((color) => color !== 0);
+
+  // Fetch image when element broken. Mainly caused by poor network.
+  if (isCanvasBlank) {
+    const fetchedImage = await loadImage(src);
+    // draw image fetch source
+    ctx.drawImage(fetchedImage, 0, 0, width, height);
+  }
+
   ditherFisrtPixel(ctx);
 
-  download(filename, canvas.toDataURL());
+  const dataUrl = canvas.toDataURL();
+
+  download(filename, dataUrl);
 };
 
 const patchNode = (node, index) => {
