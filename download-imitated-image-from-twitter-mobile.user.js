@@ -2,7 +2,7 @@
 // @name        Download imitated image from twitter
 // @namespace   suienzan
 // @include     /^https:\/\/(mobile\.)?twitter\.com\//
-// @version     1.0.0
+// @version     1.1.0
 // @author      suienzan
 // @description DO NOT USE THIS SCRIPT IF YOU DON'T EXACTLY KNOW WHAT YOU ARE DOING!
 // ==/UserScript==
