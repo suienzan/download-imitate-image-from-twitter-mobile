@@ -2,7 +2,7 @@
 // @name        Download imitated image from twitter
 // @namespace   suienzan
 // @include     /^https:\/\/(mobile\.)?twitter\.com\//
-// @version     1.1.0
+// @version     1.1.1
 // @author      suienzan
 // @description DO NOT USE THIS SCRIPT IF YOU DON'T EXACTLY KNOW WHAT YOU ARE DOING!
 // ==/UserScript==
@@ -125,22 +125,22 @@ const addDownload = (index) => {
   if (!image) return;
 
   const like = document.querySelector(likeSelector).parentNode;
-  const next = like.nextSibling;
-  const button = next.querySelector('[role="button"]');
+  const last = like.parentNode.lastChild;
+  const button = last.querySelector('[role="button"]');
 
   const indexNotMatch = Number(button.dataset.index) !== index;
   const noDownload = button.dataset.testid !== 'download';
 
   if (noDownload || indexNotMatch) {
-    const downloadNode = patchNode(next, index);
+    const downloadNode = patchNode(last, index);
     image.crossOrigin = 'Anonymous';
     downloadNode.addEventListener('click', () => imitateImage(image));
 
     if (noDownload) {
-      like.after(downloadNode);
+      last.after(downloadNode);
       return;
     }
-    next.replaceWith(downloadNode);
+    last.replaceWith(downloadNode);
   }
 };
 
