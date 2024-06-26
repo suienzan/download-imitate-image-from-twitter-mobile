@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name        Download imitated image from twitter
 // @namespace   suienzan
-// @include     /^https:\/\/(mobile\.)?twitter\.com\//
-// @version     1.1.1
+// @include     /^https:\/\/(mobile\.)?(twitter|x)\.com\//
+// @version     1.1.2
 // @author      suienzan
 // @description DO NOT USE THIS SCRIPT IF YOU DON'T EXACTLY KNOW WHAT YOU ARE DOING!
 // ==/UserScript==
@@ -144,7 +144,7 @@ const addDownload = (index) => {
   }
 };
 
-const reg = /^https:\/\/(.*\.)?twitter.com\/.*\/status\/[0-9]+\/photo\/\d/;
+const reg = /^https:\/\/(.*\.)?(twitter|x).com\/.*\/status\/[0-9]+\/photo\/\d/;
 
 // wait image & like button loaded
 const newLikeObserver = (index) => {
